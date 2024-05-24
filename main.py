@@ -1,28 +1,25 @@
-# python setup.py build_ext --inplace
-# sudo apt-get install libboost-python-dev
-# find /usr/lib /usr/local/lib -name "libboost_python*.so"
-# sudo apt install python3-all-dev
-
-
 import matrix_mult
 from random import randint
+import numpy as np
 
+# Define the initial shape of the matrix
+# Note that the rows=columns
+matrix_size = 4
 
-# 1) Python: Initialize the matrices with a constant seed (4x4, 8x8, 16x16, and so on) and alpha beta constants just like gemm
-# 2) Python: Start the timer and pass these values and matrices to C++ code
-# 3) C++: Do the multiplication just like with and without optimiation (finally if it possible add openmp)
-# 4) Python: Stop the timer and store the time value
+# Set the random seed for reproducibility
+np.random.seed(42)
 
+# Generating a square matrix with a constant seed with values between 0 and 10000
+A = np.random.randint(0, 10000, size=(matrix_size, matrix_size))
+print(A)
 
-def matrix_random_number(n_row, n_columnas):
-    return [[randint(0,100) for _ in range(n_row)] for _ in range(n_columnas)]
+# Set the random seed for reproducibility
+np.random.seed(50)
 
+# Generating a square matrix with a constant seed with values between 0 and 10000
+B = np.random.randint(0, 10000, size=(matrix_size, matrix_size))
+print(B)
 
-
-
-
-A = matrix_random_number(70, 10)
-B = matrix_random_number(10, 70)
 
 result = matrix_mult.matrix_mult(A, B)
 print(result)
