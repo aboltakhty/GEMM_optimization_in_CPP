@@ -7,6 +7,9 @@ import time
 # Note that the rows=columns
 matrix_size = 4
 
+alpha = 1.5
+beta = 1.2
+
 # On every iteration the size of matrix will double
 for i in range (2):
     # Set the random seed for reproducibility
@@ -25,14 +28,26 @@ for i in range (2):
     print("B=")
     print(B)
 
+    # Set the random seed for reproducibility
+    np.random.seed(58)
+
+    # Generating a square matrix with a constant seed with values between 0 and 10000
+    C = np.random.randint(0, 10000, size=(matrix_size, matrix_size))
+    print("C=")
+    print(C)
+
     # Convert numpy arrays to Python lists
     A = A.tolist()
     B = B.tolist()
- 
+    C = C.tolist()
+
+    # Standard GEMM formula is:
+    # C = α⋅A⋅B + β⋅C
     start = time.perf_counter()
-    result = matrix_mult.matrix_mult(A, B)
+    result = matrix_mult.matrix_mult(A, B, C, alpha, beta)
     end = time.perf_counter()
 
+    
     result = np.array(result)
     print("Result (C)=")
     print(result)
