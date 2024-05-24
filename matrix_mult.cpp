@@ -44,7 +44,7 @@ std::vector<std::vector<int>> matrix_mult(const std::vector<std::vector<int>>& A
 
     std::vector<std::vector<int>> result(rows_A, std::vector<int>(cols_B, 0));
 
-    auto start = std::chrono::high_resolution_clock::now();  // Start timing
+    // auto start = std::chrono::high_resolution_clock::now();  // Start timing
 
     for (size_t i = 0; i < rows_A; ++i) {
         for (size_t j = 0; j < cols_B; ++j) {
@@ -54,9 +54,9 @@ std::vector<std::vector<int>> matrix_mult(const std::vector<std::vector<int>>& A
         }
     }
 
-    auto end = std::chrono::high_resolution_clock::now();  // End timing
-    std::chrono::duration<double> elapsed = end - start;  // Calculate elapsed time
-    std::cout << "Matrix multiplication took " << elapsed.count() << " seconds.\n";  // Print elapsed time
+    // auto end = std::chrono::high_resolution_clock::now();  // End timing
+    // std::chrono::duration<double> elapsed = end - start;  // Calculate elapsed time
+    // std::cout << "Matrix multiplication took " << elapsed.count() << " seconds.\n";  // Print elapsed time
 
     return result;
 }
