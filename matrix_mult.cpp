@@ -33,6 +33,12 @@ boost::python::list vector_to_py_list(const std::vector<std::vector<double>>& ve
     return py_list;
 }
 
+void matrix_mult_threading(const std::vector<std::vector<double>>& A, const std::vector<std::vector<double>>& B, std::vector<std::vector<double>>& C,
+const double& alpha, const double& beta) {
+    std::cout<< "Chosen parallelism" << std::endl;
+    // WIP
+}
+
 // Standard GEMM formula is:
 // C = α⋅A⋅B + β⋅C
 // Matrix multiplication function matrix_mult(vec_A, vec_B, vec_C, alpha, beta);
@@ -83,7 +89,7 @@ const double& alpha, const double& beta) {
 
 // Wrapper function to handle Python list inputs and outputs
 boost::python::list matrix_mult_py(const boost::python::list& A, const boost::python::list& B, const boost::python::list& C,
-const double& alp, const double& be) {
+const double& alp, const double& be, const unsigned int& optimization_num) {
     std::vector<std::vector<double>> vec_A = py_list_to_vector(A);
     std::vector<std::vector<double>> vec_B = py_list_to_vector(B);
     std::vector<std::vector<double>> vec_C = py_list_to_vector(C);
@@ -91,8 +97,25 @@ const double& alp, const double& be) {
     double alpha = alp;
     double beta = be;
 
-    // std::vector<std::vector<double>> result =
-    matrix_mult(vec_A, vec_B, vec_C, alpha, beta);
+    switch (optimization_num)
+    {
+        case 0:
+        matrix_mult(vec_A, vec_B, vec_C, alpha, beta);
+        break;
+
+        case 1: // WIP (Murtaza)
+        matrix_mult_threading(vec_A, vec_B, vec_C, alpha, beta);
+        break;
+
+        case 2:
+        // WIP
+        break;
+
+        default:
+        throw std::invalid_argument("Choose a correct optimization number");
+    }
+
+    
     return vector_to_py_list(vec_C); // vec_C will store the result
 }
 

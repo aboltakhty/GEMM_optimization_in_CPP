@@ -3,9 +3,12 @@ from random import randint
 import numpy as np
 import time
 
-# Define the initial shape of the matrix
-# Note that the rows=columns
-matrix_size = 4
+# 0 means no optimization
+# 1 means optimization using parallelism
+# 2 means ...
+optimization_num = 0
+
+matrix_size = 4 # Define the initial shape of the matrix | Note that the rows=columns
 
 alpha = 1.5
 beta = 1.2
@@ -44,7 +47,7 @@ for i in range (2):
     # Standard GEMM formula is:
     # C = α⋅A⋅B + β⋅C
     start = time.perf_counter()
-    result = matrix_mult.matrix_mult(A, B, C, alpha, beta)
+    result = matrix_mult.matrix_mult(A, B, C, alpha, beta, optimization_num)
     end = time.perf_counter()
 
     
