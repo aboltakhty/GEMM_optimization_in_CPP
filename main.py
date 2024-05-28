@@ -1,61 +1,48 @@
 import matrix_mult
-from random import randint
 import numpy as np
 import time
+import argparse
 
-# 0 means no optimization
-# 1 means optimization using parallelism
-# 2 means ...
-optimization_num = 0
+def main(matrix_size: int, optimization_num: int, alpha: float, beta: float, random_seed: int) -> None:
+    np.random.seed(random_seed)
 
-matrix_size = 4 # Define the initial shape of the matrix | Note that the rows=columns
+    for _ in range(2):  # Matrix size will double on each iteration
+        # Generate random matrices A, B, and C
+        A = np.random.uniform(0, 10000, (matrix_size, matrix_size))
+        B = np.random.uniform(0, 10000, (matrix_size, matrix_size))
+        C = np.random.uniform(0, 10000, (matrix_size, matrix_size))
 
-alpha = 1.5
-beta = 1.2
+        print(f"Matrix A ({matrix_size}x{matrix_size}):\n{A}")
+        print(f"Matrix B ({matrix_size}x{matrix_size}):\n{B}")
+        print(f"Matrix C ({matrix_size}x{matrix_size}):\n{C}")
 
-# On every iteration the size of matrix will double
-for i in range (2):
-    # Set the random seed for reproducibility
-    np.random.seed(42)
+        # Convert numpy arrays to Python lists
+        A_list = A.tolist()
+        B_list = B.tolist()
+        C_list = C.tolist()
 
-    # Generating a square matrix with a constant seed with values between 0 and 10000
-    A = np.random.randint(0, 10000, size=(matrix_size, matrix_size))
-    print("A=")
-    print(A)
+        # Perform matrix multiplication using the matrix_mult module
+        start_time = time.perf_counter()
+        result = matrix_mult.matrix_mult(A_list, B_list, C_list, alpha, beta, optimization_num)
+        end_time = time.perf_counter()
 
-    # Set the random seed for reproducibility
-    np.random.seed(50)
+        elapsed_time_ms = (end_time - start_time) *1000 # Convert to milliseconds
 
-    # Generating a square matrix with a constant seed with values between 0 and 10000
-    B = np.random.randint(0, 10000, size=(matrix_size, matrix_size))
-    print("B=")
-    print(B)
+        # Convert result back to numpy array for easy handling
+        result_np = np.array(result)
+        print(f"Result matrix C ({matrix_size}x{matrix_size}):\n{result_np}")
+        print(f"Elapsed time for {matrix_size}x{matrix_size}: {elapsed_time_ms:.4f} ms")
 
-    # Set the random seed for reproducibility
-    np.random.seed(58)
+        matrix_size *= 2  # Double the matrix size for the next iteration
 
-    # Generating a square matrix with a constant seed with values between 0 and 10000
-    C = np.random.randint(0, 10000, size=(matrix_size, matrix_size))
-    print("C=")
-    print(C)
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Matrix multiplication with optimization options.')
+    parser.add_argument('--optimization_num', type=int, choices=[0, 1], default=0, help='Optimization method (0 for no optimization, 1 for parallelism)')
+    parser.add_argument('--random_seed', type=int, default=42, help='Random seed for matrix generation')
+    parser.add_argument('--matrix_size', type=int, default=4, help='Initial matrix size (will double each iteration)')
+    parser.add_argument('--alpha', type=float, default=1.5, help='Alpha scalar for the GEMM operation')
+    parser.add_argument('--beta', type=float, default=1.2, help='Beta scalar for the GEMM operation')
 
-    # Convert numpy arrays to Python lists
-    A = A.tolist()
-    B = B.tolist()
-    C = C.tolist()
+    args = parser.parse_args()
 
-    # Standard GEMM formula is:
-    # C = α⋅A⋅B + β⋅C
-    start = time.perf_counter()
-    result = matrix_mult.matrix_mult(A, B, C, alpha, beta, optimization_num)
-    end = time.perf_counter()
-
-    
-    result = np.array(result)
-    print("Result (C)=")
-    print(result)
-
-    elapsed_time_ms = (end - start) * 1000  # Convert to milliseconds
-    print(f"============ Elapsed time {matrix_size}x{matrix_size}: {elapsed_time_ms:.3f} ms ============")
-
-    matrix_size *=2 # So that size of matrix can double on every iteration
+    main(matrix_size=args.matrix_size, optimization_num=args.optimization_num, alpha=args.alpha, beta=args.beta, random_seed=args.random_seed)

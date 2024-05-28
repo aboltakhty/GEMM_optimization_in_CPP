@@ -1,4 +1,4 @@
-// matrix_mult.cpp
+#define BOOST_BIND_GLOBAL_PLACEHOLDERS
 #include <boost/python.hpp>
 #include <vector>
 #include <chrono>
@@ -25,7 +25,7 @@ boost::python::list vector_to_py_list(const std::vector<std::vector<double>>& ve
     boost::python::list py_list;
     for (const auto& subvec : vec) {
         boost::python::list sublist;
-        for (int val : subvec) {
+        for (double val : subvec) {  // Fix type to double
             sublist.append(val);
         }
         py_list.append(sublist);
