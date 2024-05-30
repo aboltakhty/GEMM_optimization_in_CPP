@@ -44,7 +44,7 @@ python3 main.py
 To customize the parameters, you can use the following command:
 
 ```bash
-python3 main.py --matrix_size=5 --optimization_num=1 --alpha=1.5 --beta=1.2 --random_seed=42
+python3 main.py --matrix_size=4 --optimization_num=0 --alpha=1.5 --beta=1.2 --random_seed=42
 ```
 
 Troubleshooting
