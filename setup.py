@@ -8,8 +8,9 @@ module = Extension(
     sources=['matrix_mult.cpp'],
     include_dirs=[boost_python_include],
     library_dirs=[boost_python_lib],
-    libraries=['boost_python310'],  # Adjust depending on your Python version
-    extra_compile_args=['-Wno-deprecated-declarations'],  # Add this line to suppress deprecation warnings
+    libraries=['boost_python311'],  # Adjust depending on your Python version
+    extra_compile_args=['-Wno-deprecated-declarations', '-fopenmp'],  # Add -fopenmp to enable OpenMP
+    extra_link_args=['-fopenmp'],  # Add -fopenmp to link OpenMP library
 )
 
 setup(

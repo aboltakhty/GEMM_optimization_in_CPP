@@ -3,6 +3,7 @@
 #include <vector>
 #include <chrono>
 #include <iostream>
+#include <omp.h>
 
 #define ENABLE_BOOST_PRECISION_TIMER 0
 
@@ -37,6 +38,32 @@ void matrix_mult_threading(const std::vector<std::vector<double>>& A, const std:
 const double& alpha, const double& beta) {
     std::cout<< "Chosen parallelism" << std::endl;
     // WIP
+    
+    uint64_t rows_A = A.size();
+    uint64_t cols_A = A[0].size();
+    uint64_t cols_B = B[0].size();
+
+
+    std::vector<std::vector<double>> result(rows_A, std::vector<double>(cols_B, 0));
+
+
+#pragma omp parallel for collapse(2)
+    // Perform matrix multiplication and scaling
+    for (uint64_t i = 0; i < rows_A; ++i) {
+        for (uint64_t j = 0; j < cols_B; ++j) {
+            for (uint64_t l = 0; l < cols_A; ++l) {
+                result[i][j] += A[i][l] * B[l][j];
+            }
+            result[i][j] *= alpha;
+        }
+    }
+
+    // Scale matrix C by beta and add to the result
+    for (uint64_t i = 0; i < rows_A; ++i) {
+        for (uint64_t j = 0; j < cols_B; ++j) {
+            C[i][j] = beta * C[i][j] + result[i][j];
+        }
+    }
 }
 
 // Standard GEMM formula is:
