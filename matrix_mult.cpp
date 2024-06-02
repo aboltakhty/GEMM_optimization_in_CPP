@@ -58,11 +58,10 @@ const double& alpha, const double& beta) {
         // Perform matrix multiplication and scaling
         for (auto i = range * T_ID; i < (T_ID == max_threads - 1 ? rows_A : range * (T_ID + 1)); ++i) {
             for (uint64_t j = 0; j < cols_B; ++j) {
-                double sum = 0;
                 for (uint64_t l = 0; l < cols_A; ++l) {
-                    sum += A[i][l] * B[l][j];
+                    result[i][j] += A[i][l] * B[l][j];
                 }
-                result[i][j] = alpha * sum;
+                result[i][j] *= alpha; // Scale the result by alpha
             }
         }
 
