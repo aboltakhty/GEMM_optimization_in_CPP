@@ -25,7 +25,15 @@ On Unix:
 source env/bin/activate
 ```
 
-## Step 3: Build the Project
+## Step 3: Install the Python dependencies
+
+Run the following command to install the python dependencies for the project:
+
+```bash
+pip install -r requirements.txt
+```
+
+## Step 4: Build the Project
 
 Run the following command to build the project in place:
 
@@ -33,7 +41,7 @@ Run the following command to build the project in place:
 python3 setup.py build_ext --inplace
 ```
 
-## Step 4: Run the Main Script
+## Step 5: Run the Main Script
 
 If everything is set up correctly, you can run the main script with the default values by executing:
 
