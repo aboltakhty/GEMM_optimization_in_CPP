@@ -39,10 +39,17 @@ const double& alpha, const double& beta) {
     
     uint64_t rows_A = A.size();
 
-    // Setting the maxinum of threads to half the number of rows
+    // Setting the maxinum of threads to half the number of rows if dimensions are greater than 128
     // In this way a single thread has to worry about only 2 rows of the result matrix
-    omp_set_num_threads(rows_A / 2);
-
+    if (rows_A <= 64)
+    {
+        omp_set_num_threads(2);
+    }
+    else
+    {
+        omp_set_num_threads(rows_A / 2);
+    }
+    
     uint64_t cols_A = A[0].size();
     uint64_t cols_B = B[0].size();
 
