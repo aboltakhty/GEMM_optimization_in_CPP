@@ -8,9 +8,9 @@ def main(matrix_size: int, optimization_num: int, alpha: float, beta: float, ran
 
     for _ in range(2):  # Matrix size will double on each iteration
         # Generate random matrices A, B, and C
-        A = np.random.uniform(0, 10000, (matrix_size, matrix_size))
-        B = np.random.uniform(0, 10000, (matrix_size, matrix_size))
-        C = np.random.uniform(0, 10000, (matrix_size, matrix_size))
+        A = np.random.uniform(0, 1000, (matrix_size, matrix_size))
+        B = np.random.uniform(0, 1000, (matrix_size, matrix_size))
+        C = np.random.uniform(0, 1000, (matrix_size, matrix_size))
 
         print(f"Matrix A ({matrix_size}x{matrix_size}):\n{A}")
         print(f"Matrix B ({matrix_size}x{matrix_size}):\n{B}")
@@ -37,9 +37,9 @@ def main(matrix_size: int, optimization_num: int, alpha: float, beta: float, ran
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Matrix multiplication with optimization options.')
-    parser.add_argument('--optimization_num', type=int, choices=[0, 1], default=0, help='Optimization method (0 for no optimization, 1 for parallelism)')
+    parser.add_argument('--optimization_num', type=int, choices=[0, 1, 2], default=0, help='Optimization method (0 for no optimization, 1 for parallelism)')
     parser.add_argument('--random_seed', type=int, default=42, help='Random seed for matrix generation')
-    parser.add_argument('--matrix_size', type=int, default=4, help='Initial matrix size (will double each iteration)')
+    parser.add_argument('--matrix_size', type=int, default=200, help='Initial matrix size (will double each iteration)')
     parser.add_argument('--alpha', type=float, default=1.5, help='Alpha scalar for the GEMM operation')
     parser.add_argument('--beta', type=float, default=1.2, help='Beta scalar for the GEMM operation')
 

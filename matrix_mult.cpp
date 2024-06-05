@@ -85,6 +85,39 @@ const double& alpha, const double& beta) {
 
 }
 
+void matrix_mult_threading_b(const std::vector<std::vector<double>>& A, const std::vector<std::vector<double>>& B, std::vector<std::vector<double>>& C,
+const double& alpha, const double& beta) {
+    
+    uint64_t rows_A = A.size();
+    uint64_t cols_A = A[0].size();
+    uint64_t cols_B = B[0].size();
+
+    // Result matrix
+    std::vector<std::vector<double>> result(rows_A, std::vector<double>(cols_B, 0));
+
+    // Set the number of threads to be used
+    omp_set_num_threads(omp_get_max_threads());
+
+    #pragma omp parallel for collapse(2) schedule(dynamic)
+    for (uint64_t i = 0; i < rows_A; ++i) {
+        for (uint64_t j = 0; j < cols_B; ++j) {
+            for (uint64_t l = 0; l < cols_A; ++l) {
+                result[i][j] += A[i][l] * B[l][j];
+            }
+            result[i][j] *= alpha; // Scale the result by alpha
+        }
+    }
+
+    // Scale matrix C by beta and add to the result
+    #pragma omp parallel for collapse(2) schedule(dynamic)
+    for (uint64_t i = 0; i < rows_A; ++i) {
+        for (uint64_t j = 0; j < cols_B; ++j) {
+            C[i][j] = beta * C[i][j] + result[i][j];
+        }
+    }
+}
+
+
 // Standard GEMM formula is:
 // C = α⋅A⋅B + β⋅C
 // Matrix multiplication function matrix_mult(vec_A, vec_B, vec_C, alpha, beta);
@@ -154,6 +187,7 @@ const double& alp, const double& be, const unsigned int& optimization_num) {
         break;
 
         case 2:
+        matrix_mult_threading_b(vec_A, vec_B, vec_C, alpha, beta);
         // WIP
         break;
 
