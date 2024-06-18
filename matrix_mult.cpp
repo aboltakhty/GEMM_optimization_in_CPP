@@ -182,13 +182,12 @@ const double& alp, const double& be, const unsigned int& optimization_num) {
         matrix_mult(vec_A, vec_B, vec_C, alpha, beta);
         break;
 
-        case 1: // WIP (Murtaza)
+        case 1:
         matrix_mult_threading(vec_A, vec_B, vec_C, alpha, beta);
         break;
 
         case 2:
         matrix_mult_threading_b(vec_A, vec_B, vec_C, alpha, beta);
-        // WIP
         break;
 
         default:
