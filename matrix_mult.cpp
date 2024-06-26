@@ -35,7 +35,7 @@ boost::python::list vector_to_py_list(const std::vector<std::vector<double>>& ve
 }
 
 void matrix_mult_threading(const std::vector<std::vector<double>>& A, const std::vector<std::vector<double>>& B, std::vector<std::vector<double>>& C,
-const double& alpha, const double& beta) {
+const double& alpha, const double& beta, const unsigned int& number_of_core) {
     
     uint64_t rows_A = A.size();
 
@@ -47,8 +47,9 @@ const double& alpha, const double& beta) {
     }
     else
     {
-        omp_set_num_threads(rows_A / 2);
+        omp_set_num_threads(8);
     }
+    // omp_set_num_threads(number_of_core);
     
     uint64_t cols_A = A[0].size();
     uint64_t cols_B = B[0].size();
@@ -86,7 +87,10 @@ const double& alpha, const double& beta) {
 }
 
 void matrix_mult_threading_b(const std::vector<std::vector<double>>& A, const std::vector<std::vector<double>>& B, std::vector<std::vector<double>>& C,
-const double& alpha, const double& beta) {
+const double& alpha, const double& beta, const unsigned int& number_of_core) {
+    
+    // omp_set_num_threads(20);
+    omp_set_num_threads(omp_get_max_threads());
     
     uint64_t rows_A = A.size();
     uint64_t cols_A = A[0].size();
@@ -97,6 +101,7 @@ const double& alpha, const double& beta) {
 
     // Set the number of threads to be used
     omp_set_num_threads(omp_get_max_threads());
+    // omp_set_num_threads(number_of_core);
 
     #pragma omp parallel for collapse(2) schedule(dynamic)
     for (uint64_t i = 0; i < rows_A; ++i) {
@@ -168,7 +173,7 @@ const double& alpha, const double& beta) {
 
 // Wrapper function to handle Python list inputs and outputs
 boost::python::list matrix_mult_py(const boost::python::list& A, const boost::python::list& B, const boost::python::list& C,
-const double& alp, const double& be, const unsigned int& optimization_num) {
+const double& alp, const double& be, const unsigned int& optimization_num, const unsigned int& number_of_core) {
     std::vector<std::vector<double>> vec_A = py_list_to_vector(A);
     std::vector<std::vector<double>> vec_B = py_list_to_vector(B);
     std::vector<std::vector<double>> vec_C = py_list_to_vector(C);
@@ -182,12 +187,22 @@ const double& alp, const double& be, const unsigned int& optimization_num) {
         matrix_mult(vec_A, vec_B, vec_C, alpha, beta);
         break;
 
+<<<<<<< HEAD
         case 1:
         matrix_mult_threading(vec_A, vec_B, vec_C, alpha, beta);
         break;
 
         case 2:
         matrix_mult_threading_b(vec_A, vec_B, vec_C, alpha, beta);
+=======
+        case 1: // WIP (Murtaza)
+        matrix_mult_threading(vec_A, vec_B, vec_C, alpha, beta, number_of_core);
+        break;
+
+        case 2:
+        matrix_mult_threading_b(vec_A, vec_B, vec_C, alpha, beta, number_of_core);
+        // WIP
+>>>>>>> 0741f04 (results)
         break;
 
         default:
